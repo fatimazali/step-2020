@@ -26,5 +26,8 @@ function addRandomFact() {
 
   // Add it to the page.
   const factContainer = document.getElementById('random-fact-container');
+  factContainer.style.color = "#023C40";
   factContainer.innerText = fact;
+  factContainer.innerText.style.color = "#FEE9E1";
+  factContainer.innerText.style.font = "20px georgia";
 }
