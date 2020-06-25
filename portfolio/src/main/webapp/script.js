@@ -13,16 +13,18 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random fact about Fatima to the page.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+function addRandomFact() {
+  const fatimaFacts =
+      ['I am left handed!', 'I have an older brother named Humza!', 
+      'My favorite color is torquise!', 'I love photography!',
+      'I would love to visit Japan someaday!', 'Growing up, I played soccer for four years!'];
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  const fact = fatimaFacts[Math.floor(Math.random() * fatimaFacts.length)];
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+  const factContainer = document.getElementById('random-fact-container');
+  factContainer.innerText = fact;
 }
