@@ -1,11 +1,34 @@
+body {
+    background-color: #937691; /* Light Purple */
+}
+
 #content {
   margin-left: auto;
   margin-right: auto;
   width: 650px;
-  color: #FEE9E1
+  font-family: Georgia;
+  color: #FEE9E1; /* Light Peach */
+}
+
+#content img {
+  width: 200px;
+  height: 200px;
+}
+
+h1, h2 {
+    background-color: #023C40; /* Dark Green */
+}
+
+#content button {
+    background-color: #023C40; /* Dark Green */
+    color: #FEE9E1; /* Light Peach */
+    font-family: Georgia;
+    width: 650px;
+    border: none;
+    text-align: left;
+    display: inline-block;
 }
 
 #random-fact-container {
   margin-top: 20px;
 }
-
