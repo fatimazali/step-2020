@@ -18,7 +18,7 @@
 function addRandomFact() {
   const fatimaFacts =
       ['I am left handed!', 'I have an older brother named Humza!', 
-      'My favorite color is torquise!', 'I love photography!',
+      'My favorite color is turquoise!', 'I love photography!',
       'I would love to visit Japan someaday!', 'Growing up, I played soccer for four years!'];
 
   // Pick a random greeting.
