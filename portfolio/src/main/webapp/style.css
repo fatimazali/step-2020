@@ -1,5 +1,5 @@
 body {
-    background-color: #693561; /* Light Purple */
+    background-color: #693561; /* Dark Purple */
 }
 
 #content {
@@ -13,6 +13,20 @@ body {
 #content img {
   width: 200px;
   height: 200px;
+}
+
+#content a:link,
+ a:visited,
+ a:active {
+  color: #EDB183; /* Orange Peach */
+  background-color: transparent;
+  text-decoration: none;
+}
+
+#content a:hover {
+  color: rgb(246, 218, 223);
+  background-color: transparent;
+  text-decoration: underline;
 }
 
 h1, 
@@ -32,4 +46,6 @@ h2 {
 
 #random-fact-container {
   margin-top: 20px;
+  background-color: #FEE9E1;
+  color: #FEE9E1; /* Light Peach */
 }
