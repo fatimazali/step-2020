@@ -29,7 +29,7 @@ function addRandomFact() {
   factContainer.style.color = "#023C40";
   factContainer.innerText = fact;
   factContainer.innerText.style.color = "#FEE9E1";
-  factContainer.innerText.style.font = "20px georgia";
+  factContainer.innerText.style.font = "12px georgia";
 }
 
 
@@ -39,5 +39,9 @@ function addRandomFact() {
 async function getGreetingUsingAsyncAwait() { 
   const response = await fetch('/data');
   const greeting = await response.text();
-  document.getElementById('greeting-container').innerHTML = greeting;
+  const greetingContainer = document.getElementById('greeting-container');
+  greetingContainer.innerText = greeting;
+  greetingContainer.innerText.style.color = "#FEE9E1";
+  greetingContainer.innerText.style.font = "12px georgia";
+  greetingContainer.innerText.padding = "10px";
 }
