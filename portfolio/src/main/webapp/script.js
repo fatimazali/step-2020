@@ -31,3 +31,13 @@ function addRandomFact() {
   factContainer.innerText.style.color = "#FEE9E1";
   factContainer.innerText.style.font = "20px georgia";
 }
+
+
+/**
+ * Gets a hard-coded "Hello Fatima" greeting from the server and adds it to the DOM
+ */
+async function getGreetingUsingAsyncAwait() { 
+  const response = await fetch('/data');
+  const greeting = await response.text();
+  document.getElementById('greeting-container').innerHTML = greeting;
+}
