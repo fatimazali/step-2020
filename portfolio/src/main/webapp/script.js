@@ -39,5 +39,5 @@ function addRandomFact() {
 async function getGreetingUsingAsyncAwait() { 
   const response = await fetch('/data');
   const greeting = await response.text();
-  document.getElementById('greeting-container').innerHTML = greeting;
+  document.getElementById('greeting-container').innerText = greeting;
 }
