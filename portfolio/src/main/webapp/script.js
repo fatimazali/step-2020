@@ -69,5 +69,8 @@ function addRandomFact() {
 async function getGreetingUsingAsyncAwait() { 
   const response = await fetch('/data');
   const greeting = await response.text();
-  document.getElementById('greeting-container').innerHTML = greeting;
+  const greetingContainer = document.getElementById('greeting-container');
+  greetingContainer.innerText = greeting;
+  greetingContainer.innerText.style.color = "#FEE9E1";
+  greetingContainer.innerText.style.font = "20px georgia";
 }

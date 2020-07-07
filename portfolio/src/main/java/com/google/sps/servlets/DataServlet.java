@@ -39,11 +39,13 @@ public class DataServlet extends HttpServlet {
     // Convert the locations to JSON
     String json = convertToJsonUsingGson(fatimaLocations);
    
-    // Send the JSON as the response
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+    // Send the JSON as the response (for Section 3 of Week 3 -- working with JSON)
+    // response.setContentType("application/json;");
+    // response.getWriter().println(json);
+    // Return Greeting to 
     // response.setContentType("text/html;");
-    // response.getWriter().println("<h3>Hello Fatima!</h3>");
+    response.setContentType("text");
+    response.getWriter().println("Hello Fatima!");
   }
 
    /**
