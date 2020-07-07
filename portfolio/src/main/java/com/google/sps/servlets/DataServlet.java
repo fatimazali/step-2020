@@ -28,6 +28,7 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+<<<<<<< HEAD
 
     // Define locations that Fatima has lived in 
     ArrayList<String> fatimaLocations = new ArrayList<String>();
@@ -43,8 +44,8 @@ public class DataServlet extends HttpServlet {
     // response.setContentType("application/json;");
     // response.getWriter().println(json);
     // Return Greeting to 
-    // response.setContentType("text/html;");
-    response.setContentType("text");
+
+    response.setContentType("text;");
     response.getWriter().println("Hello Fatima!");
   }
 
