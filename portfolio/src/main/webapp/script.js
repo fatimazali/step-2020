@@ -12,6 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// /**
+//  * Adds four locations that Fatima has lived in to the page.
+//  */
+// function addLocations() {
+//     fetch('/data').then(response => response.json()).then((locations) => {
+//     // locations is a JSON object from the JSON string
+//     // response is a JSON string, locations object
+//     console.log('Fetching a random quote.');
+//     console.log(response);
+
+//     //const locationsListElement = document.getElementById('locations-container');
+//     });
+
+// }
+/**
+ * Gets hard-coded locations from the server and
+  adds them to the DOM
+ */
+async function getLocationsUsingAsyncAwait() { 
+    
+    const response = await fetch('/data');  
+    const locations = await response.json()
+    console.log('Fetching locations.');
+    console.log(locations);
+
+    const locationsListElement = document.getElementById('locations-container');
+    locationsListElement.innerText = locations;
+    // locationsListElement.innerHTML = '';
+    // locationsListElement.appendChild(
+    //     createListElement('1: ' + locations.get(0)));
+    // locationsListElement.appendChild(
+    //     createListElement('2: ' + locations.get(1)));
+    // locationsListElement.appendChild(
+    //     createListElement('3: ' + locations.get(2)));
+    // locationsListElement.appendChild(
+    //     createListElement('4: ' + locations.get(3)));
+    
+    //     response.setContentType("application/json;");
+    // response.getWriter().println(json);
+  //document.getElementById('greeting-container').innerText = greeting;
+}
+
+
+
 /**
  * Adds a random fact about Fatima to the page.
  */

@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,14 +26,34 @@ import java.util.ArrayList;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> fatimaLocations = new ArrayList<String>();
-  fatimaLocations.add("Lansing, Michigan");
-  fatimaLocations.add("Scott's Valley, California");
-  fatimaLocations.add("Cupertino, California");
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<h3>Hello Fatima!</h3>");
+
+    // Define locations that Fatima has lived in 
+    ArrayList<String> fatimaLocations = new ArrayList<String>();
+    fatimaLocations.add("Lansing, Michigan");
+    fatimaLocations.add("Scotts Valley, California");
+    fatimaLocations.add("Cupertino, California");
+    fatimaLocations.add("Irvine, California");
+
+    // Convert the locations to JSON
+    String json = convertToJsonUsingGson(fatimaLocations);
+   
+    // Send the JSON as the response
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
+    // response.setContentType("text/html;");
+    // response.getWriter().println("<h3>Hello Fatima!</h3>");
   }
+
+   /**
+   * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
+   * the Gson library dependency to pom.xml.
+   */
+  private String convertToJsonUsingGson(ArrayList<String> locations) {
+    Gson gson = new Gson();
+    String json = gson.toJson(locations);
+    return json;
+  }
+
 }
