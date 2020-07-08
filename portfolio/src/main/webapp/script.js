@@ -41,7 +41,6 @@ function createListElement(text) {
   return liElement;
 }
 
-
 /**
  * Adds a random fact about Fatima to the page.
  */
@@ -61,7 +60,6 @@ function addRandomFact() {
   factContainer.innerText.style.color = "#FEE9E1";
   factContainer.innerText.style.font = "12px georgia";
 }
-
 
 /**
  * Gets a hard-coded "Hello Fatima" greeting from the server and adds it to the DOM
