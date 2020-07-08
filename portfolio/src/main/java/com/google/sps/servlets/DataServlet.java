@@ -28,7 +28,6 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-<<<<<<< HEAD
 
     // Define locations that Fatima has lived in 
     ArrayList<String> fatimaLocations = new ArrayList<String>();
@@ -41,12 +40,8 @@ public class DataServlet extends HttpServlet {
     String json = convertToJsonUsingGson(fatimaLocations);
    
     // Send the JSON as the response (for Section 3 of Week 3 -- working with JSON)
-    // response.setContentType("application/json;");
-    // response.getWriter().println(json);
-    // Return Greeting to 
-
-    response.setContentType("text;");
-    response.getWriter().println("Hello Fatima!");
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 
    /**

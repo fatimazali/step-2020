@@ -72,10 +72,6 @@ async function getGreetingUsingAsyncAwait() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
   greetingContainer.innerText.style.color = "#FEE9E1";
-<<<<<<< HEAD
-  greetingContainer.innerText.style.font = "20px georgia";
-=======
   greetingContainer.innerText.style.font = "12px georgia";
   greetingContainer.innerText.padding = "10px";
->>>>>>> dbf900f53fb91909e8ba8c2a2a998366d675f3b6
 }
