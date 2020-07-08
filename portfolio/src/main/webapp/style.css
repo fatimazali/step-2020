@@ -46,6 +46,12 @@ h2 {
 
 #random-fact-container {
   margin-top: 20px;
-  background-color: #FEE9E1;
+  background-color: #FEE9E1; /* Light Peach */
+  color: #FEE9E1; /* Light Peach */
+}
+
+#locations-container {
+  margin-top: 20px;
+  background-color: #FEE9E1; /* Light Peach */
   color: #FEE9E1; /* Light Peach */
 }
