@@ -31,11 +31,20 @@
         <button onclick="getGreetingUsingAsyncAwait()">Fetch a greeting!</button>
         <div id="greeting-container"></div>
 
-        <h2>Locations Where I've Lived</h2>
-        <p>Click here to see the places I've called home:</p>
-        <button onclick="getLocationsUsingAsyncAwait()">See my locations!</button>
+        <h2>Places I've Called Home</h2>
         <ul id="locations-container"></ul>
-        
+
+        <h2>Leave me a comment!</h2>
+
+        <form action="/data" method="POST">
+
+          <p>What's on your mind today?:</p>
+          <p>Enter a comma-separated list of comments:</p>
+          <textarea name="text-input">Hi!, Hello!, Have a great day!</textarea>
+          <br/><br/>
+
+          <input type="submit" />
+        </form>
     </div>
   </body>
 </html>

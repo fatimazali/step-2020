@@ -21,28 +21,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    // Define locations that Fatima has lived in 
-    ArrayList<String> fatimaLocations = new ArrayList<String>();
-    fatimaLocations.add("Lansing, Michigan");
-    fatimaLocations.add("Scotts Valley, California");
-    fatimaLocations.add("Cupertino, California");
-    fatimaLocations.add("Irvine, California");
-
-    // Convert the locations to JSON
-    String json = convertToJsonUsingGson(fatimaLocations);
-   
-    // Send the JSON as the response (for Section 3 of Week 3 -- working with JSON)
-    response.setContentType("application/json;");
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Get the input from the form.
+    ArrayList<String> comments = new ArrayList<String>();
+    String userComments = getParameter(request, "text-input", "");
+    String[] words = userComments.split("\\s*,\\s*");
+    
+    for (String comment : words) {
+        comments.add(comment);
+    }
+    
+    // Respond with the result.
+    response.setContentType("application/json");
+    String json = new Gson().toJson(comments);
     response.getWriter().println(json);
-
+  }
+  
+  /**
+   * @return the request parameter, or the default value if the parameter
+   *         was not specified by the client
+   */
+  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+    String value = request.getParameter(name);
+    if (value == null) {
+      return defaultValue;
+    }
+    return value;
   }
 
    /**
