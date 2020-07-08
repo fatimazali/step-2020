@@ -13,8 +13,7 @@
 // limitations under the License.
 
 /**
- * Gets hard-coded locations from the server and
-  adds them to the DOM
+ * Gets hard-coded locations from the server and adds them to the DOM
  */
 async function getLocationsUsingAsyncAwait() { 
     
