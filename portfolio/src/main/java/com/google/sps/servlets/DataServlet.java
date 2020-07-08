@@ -52,8 +52,9 @@ public class DataServlet extends HttpServlet {
   }
   
   /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return the user's input, or the default data for an input element
+   * @param name of the input element or text area to retrieve user input from 
+   * @param defaultValue to return if the user doesn't enter their own input
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
