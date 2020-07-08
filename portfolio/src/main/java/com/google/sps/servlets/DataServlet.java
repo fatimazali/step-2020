@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -23,30 +26,35 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that parses user comments and stores them in Datastore. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
     // Get the input from the form.
     ArrayList<String> comments = new ArrayList<String>();
     String userComments = getParameter(request, "text-input", "");
     String[] words = userComments.split("\\s*,\\s*");
     
     for (String comment : words) {
-        comments.add(comment);
+        long timestamp = System.currentTimeMillis();
+        Entity commentEntity = new Entity("Comment");
+        commentEntity.setProperty("text", comment);
+        commentEntity.setProperty("timestamp", timestamp);        
+
+        datastore.put(commentEntity);
     }
-    
-    // Respond with the result.
-    response.setContentType("application/json");
-    String json = new Gson().toJson(comments);
-    response.getWriter().println(json);
+
+    response.sendRedirect("/index.html");
   }
   
   /**
-   * @return the request parameter, or the default value if the parameter
-   *         was not specified by the client
+   * @return the user's input, or the default data for an input element
+   * @param name of the input element or text area to retrieve user input from 
+   * @param defaultValue to return if the user doesn't enter their own input
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
