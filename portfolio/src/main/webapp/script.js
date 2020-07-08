@@ -13,6 +13,35 @@
 // limitations under the License.
 
 /**
+ * Gets hard-coded locations from the server and adds them to the DOM
+ */
+async function getLocationsUsingAsyncAwait() { 
+    
+    const response = await fetch('/data');  
+    const locations = await response.json()
+
+    const locationsListElement = document.getElementById('locations-container');
+    locationsListElement.innerHTML = '';
+    locationsListElement.appendChild(
+        createListElement('🗻: ' + locations[0]));
+    locationsListElement.appendChild(
+        createListElement('🌊: ' + locations[1]));
+    locationsListElement.appendChild(
+        createListElement('🖥: ' + locations[2]));
+    locationsListElement.appendChild(
+        createListElement('🌻: ' + locations[3]));
+    
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+
+/**
  * Adds a random fact about Fatima to the page.
  */
 function addRandomFact() {
