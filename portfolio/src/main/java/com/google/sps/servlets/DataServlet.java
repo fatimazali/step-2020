@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that parses user comments and stores them in Datastore. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
