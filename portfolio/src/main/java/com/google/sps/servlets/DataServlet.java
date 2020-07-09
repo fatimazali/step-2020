@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/** Servlet that parses user comments and stores them in Datastore. */
+/** Servlet that parses user comments, stores them in Datastore, and retrieves them from Datastore. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
@@ -39,13 +39,22 @@ public class DataServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+    int maxComments = getUserMaximum(request); //("maxcomment", 20);
+
 
     ArrayList<String> comments = new ArrayList<>();
+    int commentCount = 0; 
     for (Entity entity : results.asIterable()) {
       long id = entity.getKey().getId();
       String comment = (String) entity.getProperty("text");
 
       comments.add(comment);
+      
+      commentCount += 1;
+      if (commentCount == maxComments) {
+          break;
+      }
+      
     }
 
     Gson gson = new Gson();
@@ -87,6 +96,45 @@ public class DataServlet extends HttpServlet {
     }
     return value;
   }
+
+//   /**
+//    * @return the user's input, or the default data for an input element
+//    * @param name of the input element or text area to retrieve user input from 
+//    * @param defaultValue to return if the user doesn't enter their own input
+//    */
+//   private Integer getUserMaximum(HttpServletRequest request, String name, Integer defaultValue) {
+//     Integer value = (long)request.getParameter(name);
+//     if (value == null) {
+//       return defaultValue;
+//     }
+//     return value;
+//   }
+
+
+  /** Returns the choice entered by the player, or -1 if the choice was invalid. */
+  private int getUserMaximum(HttpServletRequest request) {
+    // Get the input from the form.
+    String playerChoiceString = request.getParameter("maxcomment");
+
+    // Convert the input to an int.
+    int playerChoice;
+    try {
+      playerChoice = Integer.parseInt(playerChoiceString);
+    } catch (NumberFormatException e) {
+      System.err.println("Could not convert to int: " + playerChoiceString);
+      return -1;
+    }
+
+    // Check that the input is between 1 and 3.
+    if (playerChoice < 1 || playerChoice > 3) {
+      System.err.println("Player choice is out of range: " + playerChoiceString);
+      return -1;
+    }
+
+    return playerChoice;
+  }
+
+
 
    /**
    * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
