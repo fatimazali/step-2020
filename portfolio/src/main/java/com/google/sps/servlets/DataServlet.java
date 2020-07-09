@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 
 /** Servlet that parses user comments, stores them in Datastore, and retrieves them from Datastore. */
@@ -36,24 +38,21 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    int maxComments = getUserMaximum(request); //("maxcomment", 20);
+    FetchOptions commentLimit = FetchOptions.Builder.withLimit(maxComments);
+    //List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(maxComments));
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-    int maxComments = getUserMaximum(request); //("maxcomment", 20);
-
+    List<Entity> resultsList = datastore.prepare(query).asList(commentLimit);
+    
 
     ArrayList<String> comments = new ArrayList<>();
     int commentCount = 0; 
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : resultsList) {
       long id = entity.getKey().getId();
       String comment = (String) entity.getProperty("text");
 
       comments.add(comment);
-      
-      commentCount += 1;
-      if (commentCount == maxComments) {
-          break;
-      }
       
     }
 
