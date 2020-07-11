@@ -28,7 +28,7 @@ async function getCommentsUsingAsyncAwait() {
     
     const commentsListElement = document.getElementById('comments-list');
 
-    // Delete old comments if any are currently displayed
+    commentsListElement.innerHTML = ""; // Delete old comment elements if any are currently displayed
 
     // Build the new list of comments
     comments.forEach((line) => {
