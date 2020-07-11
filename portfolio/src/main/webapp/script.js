@@ -12,39 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// get data from input form to display comments 
-
 /**
  * Fetches comments from the server and adds them to the DOM
  */
 async function getCommentsUsingAsyncAwait() { 
-    
-    const response = await fetch('/data');  
+
+    // Parse user display selections
+    const commentLimit = document.getElementById("comment-limit").value;
+
+    // Retrieve comments from the server
+    const queryString = "?commentlimit=" + commentLimit;
+    const response = await fetch("/data" + queryString); 
     const comments = await response.json()
 
-    // fetch x comments from user input - how to set this here? 
+    
+    const commentsListElement = document.getElementById('comments-list');
 
-    // iterate through comments and add to page to display
+    // Delete old comments if any are currently displayed
 
-    // get from query first 
-    // then get from input form
-
-    // use paramater to limit comments ah 
-
-    const commentsListElement = document.getElementById('locations-container');
-    commentsListElement.innerHTML = ''; // resetting the html??
-    commentsListElement.appendChild(
-        createListElement('🌻 ' + locations[0]));
-
-    // Build the list of history entries.
-    const historyEl = document.getElementById('history');
-    game.history.forEach((line) => {
-      historyEl.appendChild(createListElement(line));
+    // Build the new list of comments
+    comments.forEach((line) => {
+      commentsListElement.appendChild(createListElement('🌻 ' + line));
     });
     
 }
-
-
 
 /**
  * Gets hard-coded locations from the server and adds them to the DOM
@@ -67,7 +58,9 @@ async function getLocationsUsingAsyncAwait() {
     
 }
 
-/** Creates an <li> element containing text. */
+/**  
+  * Creates an <li> element containing text.
+  */
 function createListElement(text) {
   const liElement = document.createElement('li');
   liElement.innerText = text;

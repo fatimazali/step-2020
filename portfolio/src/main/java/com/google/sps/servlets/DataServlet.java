@@ -35,13 +35,18 @@ import java.util.Arrays;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  /**
+  * Fetches limited number of comments from Datastore and returns them
+  * @param request the request message
+  * @param response the response message
+  * @throws IOException if an I/O error occurs
+  */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    int maxComments = getUserMaximum(request); //("maxcomment", 20);
-    FetchOptions commentLimit = FetchOptions.Builder.withLimit(maxComments);
-    //List<Entity> resultsList = results.asList(FetchOptions.Builder.withLimit(maxComments));
+    int maxComments = getUserMaximum(request);
 
+    FetchOptions commentLimit = FetchOptions.Builder.withLimit(maxComments);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Entity> resultsList = datastore.prepare(query).asList(commentLimit);
     
@@ -55,13 +60,18 @@ public class DataServlet extends HttpServlet {
       comments.add(comment);
       
     }
-
-    Gson gson = new Gson();
-
+    
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(comments));
+    response.getWriter().println(convertToJsonUsingGson(comments));
+
   }
 
+  /**
+   * Process user comments and store them into Datastore
+   * @param request the request message
+   * @param response the response message
+   * @throws IOException if an I/O error occurs
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {    
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -71,6 +81,7 @@ public class DataServlet extends HttpServlet {
     String userComments = getParameter(request, "text-input", "");
     String[] words = userComments.split("\\s*,\\s*");
     
+    // Store each comment as an entity in Datastore
     for (String comment : words) {
         long timestamp = System.currentTimeMillis();
         Entity commentEntity = new Entity("Comment");
@@ -81,9 +92,11 @@ public class DataServlet extends HttpServlet {
     }
 
     response.sendRedirect("/index.html");
+    
   }
   
   /**
+   * Returns String input entered by the commenter
    * @return the user's input, or the default data for an input element
    * @param name of the input element or text area to retrieve user input from 
    * @param defaultValue to return if the user doesn't enter their own input
@@ -96,24 +109,15 @@ public class DataServlet extends HttpServlet {
     return value;
   }
 
-//   /**
-//    * @return the user's input, or the default data for an input element
-//    * @param name of the input element or text area to retrieve user input from 
-//    * @param defaultValue to return if the user doesn't enter their own input
-//    */
-//   private Integer getUserMaximum(HttpServletRequest request, String name, Integer defaultValue) {
-//     Integer value = (long)request.getParameter(name);
-//     if (value == null) {
-//       return defaultValue;
-//     }
-//     return value;
-//   }
-
-
-  /** Returns the choice entered by the player, or -1 if the choice was invalid. */
+ /**
+   * Returns the choice entered by the player, or 0 if the choice was out of the specified range. 
+   * @return the user's input, or the default data for an input element
+   * @param name of the input element or text area to retrieve user input from 
+   * @param defaultValue to return if the user doesn't enter their own input
+   */
   private int getUserMaximum(HttpServletRequest request) {
-    // Get the input from the form.
-    String playerChoiceString = request.getParameter("maxcomment");
+    // Get the input from the form. vs query string?
+    String playerChoiceString = request.getParameter("commentlimit");
 
     // Convert the input to an int.
     int playerChoice;
@@ -121,19 +125,17 @@ public class DataServlet extends HttpServlet {
       playerChoice = Integer.parseInt(playerChoiceString);
     } catch (NumberFormatException e) {
       System.err.println("Could not convert to int: " + playerChoiceString);
-      return -1;
+      return 0;
     }
 
-    // Check that the input is between 1 and 3.
-    if (playerChoice < 1 || playerChoice > 3) {
+    // Check that the input is between 1 and 10.
+    if (playerChoice < 1 || playerChoice > 10) {
       System.err.println("Player choice is out of range: " + playerChoiceString);
-      return -1;
+      return 0;
     }
 
     return playerChoice;
   }
-
-
 
    /**
    * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
