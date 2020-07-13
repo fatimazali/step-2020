@@ -13,6 +13,18 @@
 // limitations under the License.
 
 /**
+ * Deletes comments from the server and clear them from the DOM
+ */
+async function deleteCommentsUsingAsyncAwait() { 
+
+    // Delete comments from the server
+    const response = await fetch("/delete-data", {method: 'POST'}); 
+
+    // Fetch (empty) comments from the server to remove comments from the page
+    getCommentsUsingAsyncAwait();
+}
+
+/**
  * Fetches comments from the server and adds them to the DOM
  */
 async function getCommentsUsingAsyncAwait() { 
@@ -25,16 +37,15 @@ async function getCommentsUsingAsyncAwait() {
     const response = await fetch("/data" + queryString); 
     const comments = await response.json()
 
-    
     const commentsListElement = document.getElementById('comments-list');
 
-    commentsListElement.innerHTML = ""; // Delete old comment elements if any are currently displayed
+    // Delete old comment elements if any are currently displayed
+    commentsListElement.innerHTML = ""; 
 
     // Build the new list of comments
     comments.forEach((line) => {
       commentsListElement.appendChild(createListElement('🌻 ' + line));
     });
-    
 }
 
 /**
@@ -54,8 +65,7 @@ async function getLocationsUsingAsyncAwait() {
     locationsListElement.appendChild(
         createListElement('🖥: ' + locations[2]));
     locationsListElement.appendChild(
-        createListElement('🌻: ' + locations[3]));
-    
+        createListElement('🌻: ' + locations[3]));   
 }
 
 /**  
