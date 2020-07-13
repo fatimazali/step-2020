@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -31,65 +32,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
-/** Servlet that parses user comments, stores them in Datastore, and retrieves them from Datastore. */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
-
-  /**
-  * Fetches limited number of comments from Datastore and returns them
-  * @param request the request message
-  * @param response the response message
-  * @throws IOException if an I/O error occurs
-  */
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
-    int maxComments = getUserMaximum(request);
-
-    FetchOptions commentLimit = FetchOptions.Builder.withLimit(maxComments);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    List<Entity> resultsList = datastore.prepare(query).asList(commentLimit);
+/** Servlet that deletes user comments from Datastore. */
+@WebServlet("/delete-data")
+public class DeleteDataServlet extends HttpServlet {
     
-    ArrayList<String> comments = new ArrayList<>();
-
-    for (Entity entity : resultsList) {
-      long id = entity.getKey().getId();
-      String comment = (String) entity.getProperty("text");
-
-      comments.add(comment);
-      
-    }
-    
-    response.setContentType("application/json;");
-    response.getWriter().println(convertToJsonUsingGson(comments));
-  }
-
   /**
-   * Process user comments and store them into Datastore
+   * Delete user comments and return an empty response
    * @param request the request message
    * @param response the response message
    * @throws IOException if an I/O error occurs
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {    
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
 
-    // Get the input from the form.
-    ArrayList<String> comments = new ArrayList<String>();
-    String userComments = getParameter(request, "text-input", "");
-    String[] words = userComments.split("\\s*,\\s*");
-    
-    // Store each comment as an entity in Datastore
-    for (String comment : words) {
-        long timestamp = System.currentTimeMillis();
-        Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("text", comment);
-        commentEntity.setProperty("timestamp", timestamp);        
+    for (Entity entity : results.asIterable()) {
+      Key commentKey = entity.getKey();
+      datastore.delete(commentKey);
 
-        datastore.put(commentEntity);
     }
-
+    
+    // response.setContentType("application/json;");
+    // response.getWriter().println(convertToJsonUsingGson(""));
     response.sendRedirect("/index.html");
+    
   }
   
   /**
@@ -143,4 +111,5 @@ public class DataServlet extends HttpServlet {
     String json = gson.toJson(locations);
     return json;
   }
+
 }
