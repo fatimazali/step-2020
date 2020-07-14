@@ -57,9 +57,8 @@ public class ReturnLoginServlet extends HttpServlet {
         response.getWriter().println(convertToJsonUsingGson(loginStatus));
   }
 
-   /**
-   * Converts a boolean into a JSON string using the Gson library. Note: I first added
-   * the Gson library dependency to pom.xml.
+  /**
+   * Converts a boolean into a JSON string using the Gson library.
    */
   private String convertToJsonUsingGson(boolean truthCondition) {
     Gson gson = new Gson();
