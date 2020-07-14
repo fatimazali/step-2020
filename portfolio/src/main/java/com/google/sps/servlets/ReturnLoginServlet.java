@@ -38,11 +38,11 @@ import java.util.Arrays;
 public class ReturnLoginServlet extends HttpServlet {
 
   /**
-  * Fetches login status of current user and returns the status as a a boolean value
-  * @param request the request message
-  * @param response the response message
-  * @throws IOException if an I/O error occurs
-  */
+   * Fetches login status of current user and returns the status as a a boolean value
+   * @param request the request message
+   * @param response the response message
+   * @throws IOException if an I/O error occurs
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     boolean loginStatus = false;
