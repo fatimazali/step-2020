@@ -13,6 +13,22 @@
 // limitations under the License.
 
 /**
+ * Check whether the user is currently logged in. If so, display comments. Else, display a login form.
+ */
+async function displayLoginAndComments() { 
+
+    // Fetch login status from the server
+    const response = await fetch("/login-status", {method: 'GET'}); 
+    const comments = await response.json()
+
+    // Display the comment form
+    getCommentsUsingAsyncAwait();
+
+    // Display the login link
+
+}
+
+/**
  * Deletes comments from the server and clear them from the DOM
  */
 async function deleteCommentsUsingAsyncAwait() { 
