@@ -15,6 +15,26 @@
 /**
  * Deletes comments from the server and clear them from the DOM
  */
+async function displayCommentsAndLoginUsingAsyncAwait() { 
+
+    // Fetch login status comments from the server
+    const response = await fetch("/login-status", {method: 'GET'}); 
+    const login_status = await response.json()
+    // Unhide the form if user is logged in
+    if (login_status) {
+        document.getElementById("element").style.display = "block";
+    }
+    // Display a login link if user is not logged in
+    else {
+        document.getElementById("element").style.display = "block";
+    }
+    // Fetch (empty) comments from the server to remove comments from the page
+    getCommentsUsingAsyncAwait();
+}
+
+/**
+ * Deletes comments from the server and clear them from the DOM
+ */
 async function deleteCommentsUsingAsyncAwait() { 
 
     // Delete comments from the server
