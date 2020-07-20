@@ -16,29 +16,31 @@
  * Checks whether the user is currently logged in. If so, displays comments. Else, displays a login form.
  */
 async function displayLoginAndComments() { 
-
     // Fetch login status from the server
     const response = await fetch("/login-status", {method: 'GET'}); 
-    const comments = await response.json()
+    const login_status = await response.json()
+
+    // access the login_status
 
     // Display the comment form
-    getCommentsUsingAsyncAwait();
+    if (login_status) {
+        displayCommentsForm();
+    }
 
     // Display the login link
+    else {
+        displayLoginLink();
+    }
 
 }
 
 /**
  * Ensures that user is logged in, then displays the comment input form to the user
  */
-async function displayCommentsUsingAsyncAwait() { 
-    // Fetch login status comments from the server
-    const response = await fetch("/login-status", {method: 'GET'}); 
-    const login_status = await response.json()
+async function displayCommentsForm() { 
     // Unhide the form if user is logged in
-    if (login_status) {
-        document.getElementById("comments-container").style.display = "block";
-    }
+    document.getElementById("comments-container").style.display = "block";
+
 }
 
 /**
