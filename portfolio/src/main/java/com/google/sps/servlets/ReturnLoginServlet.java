@@ -38,7 +38,8 @@ import java.util.Arrays;
 public class ReturnLoginServlet extends HttpServlet {
 
   /**
-   * Fetches login status of current user and returns the status as a a boolean value
+   * Fetches login status of current user and returns the status as a a boolean value.
+   * Redirects user to login page if they are not logged in.
    * @param request the request message
    * @param response the response message
    * @throws IOException if an I/O error occurs
@@ -52,9 +53,13 @@ public class ReturnLoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
         loginStatus = true;
     } else {
-        loginStatus = false;
+        String urlToRedirectToAfterUserLogsIn = "/login-status";
+        String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+        response.sendRedirect(loginUrl);
     }
-        response.getWriter().println(convertToJsonUsingGson(loginStatus));
+    
+    response.getWriter().println(convertToJsonUsingGson(loginStatus));
+
   }
 
   /**

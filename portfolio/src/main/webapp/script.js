@@ -15,8 +15,20 @@
 /**
  * Deletes comments from the server and clear them from the DOM
  */
-async function deleteCommentsUsingAsyncAwait() { 
+async function displayCommentsUsingAsyncAwait() { 
+    // Fetch login status comments from the server
+    const response = await fetch("/login-status", {method: 'GET'}); 
+    const login_status = await response.json()
+    // Unhide the form if user is logged in
+    if (login_status) {
+        document.getElementById("comments-container").style.display = "block";
+    }
+}
 
+/**
+ * Deletes comments from the server and clear them from the DOM
+ */
+async function deleteCommentsUsingAsyncAwait() { 
     // Delete comments from the server
     const response = await fetch("/delete-data", {method: 'POST'}); 
 
@@ -28,7 +40,6 @@ async function deleteCommentsUsingAsyncAwait() {
  * Fetches comments from the server and adds them to the DOM
  */
 async function getCommentsUsingAsyncAwait() { 
-
     // Parse user display selections
     const commentLimit = document.getElementById("comment-limit").value;
 
@@ -52,7 +63,6 @@ async function getCommentsUsingAsyncAwait() {
  * Gets hard-coded locations from the server and adds them to the DOM
  */
 async function getLocationsUsingAsyncAwait() { 
-    
     const response = await fetch('/data');  
     const locations = await response.json()
 
