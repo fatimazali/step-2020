@@ -20,8 +20,6 @@ async function displayLoginAndComments() {
     const response = await fetch("/login-status", {method: 'GET'}); 
     const login_status = await response.json()
 
-    // access the login_status
-
     // Display the comment form
     if (login_status) {
         displayCommentsForm();
