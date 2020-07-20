@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
@@ -55,8 +57,10 @@ public class DataServlet extends HttpServlet {
     for (Entity entity : resultsList) {
       long id = entity.getKey().getId();
       String comment = (String) entity.getProperty("text");
+      String email = (String) entity.getProperty("email");
+      String fullComment = String.format("%s said: %s", email, comment);
 
-      comments.add(comment);
+      comments.add(fullComment);
       
     }
     
@@ -65,7 +69,7 @@ public class DataServlet extends HttpServlet {
   }
 
   /**
-   * Process user comments and store them into Datastore
+   * Process user comments and email and proceeds to store both items into Datastore
    * @param request the request message
    * @param response the response message
    * @throws IOException if an I/O error occurs
@@ -73,20 +77,28 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {    
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    UserService userService = UserServiceFactory.getUserService();
 
-    // Get the input from the form.
-    ArrayList<String> comments = new ArrayList<String>();
-    String userComments = getParameter(request, "text-input", "");
-    String[] words = userComments.split("\\s*,\\s*");
-    
-    // Store each comment as an entity in Datastore
-    for (String comment : words) {
-        long timestamp = System.currentTimeMillis();
-        Entity commentEntity = new Entity("Comment");
-        commentEntity.setProperty("text", comment);
-        commentEntity.setProperty("timestamp", timestamp);        
+    // Validate that user is still logged in before adding their input to Datastore
+    if (userService.isUserLoggedIn()) {
+        String userEmail = userService.getCurrentUser().getEmail();
 
-        datastore.put(commentEntity);
+        // Get the input from the form.
+        ArrayList<String> comments = new ArrayList<String>();
+        String userComments = getParameter(request, "text-input", "");
+        String[] words = userComments.split("\\s*,\\s*");
+        
+        // Store each comment as an entity in Datastore
+        for (String comment : words) {
+            long timestamp = System.currentTimeMillis();
+            Entity commentEntity = new Entity("Comment");
+            commentEntity.setProperty("email", userEmail);
+            commentEntity.setProperty("text", comment);
+            commentEntity.setProperty("timestamp", timestamp);        
+
+            datastore.put(commentEntity);
+        }
+
     }
 
     response.sendRedirect("/index.html");

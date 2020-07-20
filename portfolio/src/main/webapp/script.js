@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /**
- * Check whether the user is currently logged in. If so, display comments. Else, display a login form.
+ * Checks whether the user is currently logged in. If so, displays comments. Else, displays a login form.
  */
 async function displayLoginAndComments() { 
 
@@ -29,7 +29,7 @@ async function displayLoginAndComments() {
 }
 
 /**
- * Deletes comments from the server and clear them from the DOM
+ * Ensures that user is logged in, then displays the comment input form to the user
  */
 async function displayCommentsUsingAsyncAwait() { 
     // Fetch login status comments from the server
