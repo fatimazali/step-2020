@@ -55,3 +55,7 @@ h2 {
   background-color: #FEE9E1; /* Light Peach */
   color: #FEE9E1; /* Light Peach */
 }
+
+#comments-container {
+  display: none;
+}
