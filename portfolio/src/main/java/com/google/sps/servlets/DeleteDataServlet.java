@@ -62,9 +62,9 @@ public class DeleteDataServlet extends HttpServlet {
   
   /**
    * Returns String input entered by the commenter
-   * @return the user's input, or the default data for an input element
    * @param name of the input element or text area to retrieve user input from 
    * @param defaultValue to return if the user doesn't enter their own input
+   * @return the user's input, or the default data for an input element
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
@@ -74,11 +74,11 @@ public class DeleteDataServlet extends HttpServlet {
     return value;
   }
 
- /**
+  /**
    * Returns the choice entered by the player, or 0 if the choice was out of the specified range. 
-   * @return the user's input, or the default data for an input element
    * @param name of the input element or text area to retrieve user input from 
    * @param defaultValue to return if the user doesn't enter their own input
+   * @return the user's input, or the default data for an input element
    */
   private int getUserMaximum(HttpServletRequest request) {
     // Get the input from the form. vs query string?
@@ -102,7 +102,7 @@ public class DeleteDataServlet extends HttpServlet {
     return playerChoice;
   }
 
-   /**
+  /**
    * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
    * the Gson library dependency to pom.xml.
    */
