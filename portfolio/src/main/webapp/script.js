@@ -29,7 +29,6 @@ async function displayLoginAndComments() {
     else {
         displayLoginLink();
     }
-
 }
 
 /**

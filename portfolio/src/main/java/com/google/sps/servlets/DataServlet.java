@@ -38,11 +38,11 @@ import java.util.Arrays;
 public class DataServlet extends HttpServlet {
 
   /**
-  * Fetches limited number of comments from Datastore and returns them
-  * @param request the request message
-  * @param response the response message
-  * @throws IOException if an I/O error occurs
-  */
+   * Fetches limited number of comments from Datastore and returns them
+   * @param request the request message
+   * @param response the response message
+   * @throws IOException if an I/O error occurs
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
@@ -105,10 +105,10 @@ public class DataServlet extends HttpServlet {
   }
   
   /**
-    * Returns String input entered by the commenter
-    * @return the user's input, or the default data for an input element
-    * @param name of the input element or text area to retrieve user input from 
-    * @param defaultValue to return if the user doesn't enter their own input
+   * Returns String input entered by the commenter
+   * @param name of the input element or text area to retrieve user input from 
+   * @param defaultValue to return if the user doesn't enter their own input
+   * @return the user's input, or the default data for an input element
    */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
@@ -118,11 +118,11 @@ public class DataServlet extends HttpServlet {
     return value;
   }
 
- /**
+  /**
    * Returns the choice entered by the player, or 0 if the choice was out of the specified range. 
-   * @return the user's input, or the default data for an input element
    * @param name of the input element or text area to retrieve user input from 
    * @param defaultValue to return if the user doesn't enter their own input
+   * @return the user's input, or the default data for an input element
    */
   private int getUserMaximum(HttpServletRequest request) {
     // Get the input from the form. vs query string?
@@ -147,9 +147,9 @@ public class DataServlet extends HttpServlet {
   }
 
    /**
-   * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
-   * the Gson library dependency to pom.xml.
-   */
+    * Converts an ArrayList<String> into a JSON string using the Gson library. Note: We first added
+    * the Gson library dependency to pom.xml.
+    */
   private String convertToJsonUsingGson(ArrayList<String> locations) {
     Gson gson = new Gson();
     String json = gson.toJson(locations);
