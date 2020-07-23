@@ -46,7 +46,20 @@ public final class FindMeetingQuery {
    * @param attendees The collection of people attending the event. Must be non-null.
    */
    private ArrayList<TimeRange> findEventTimes(Collection<Event> events, MeetingRequest request) {
+       ArrayList<TimeRange> times = new ArrayList<TimeRange>();
+        for (Event event : events) {
+            HashSet<String> commonAttendees = new HashSet<String>();
 
+            // Add the event attendees first because there tends to be fewer of them
+            commonAttendees.addAll(event.getAttendees()); 
+            // Ensure to only find availability of the requested attendees
+            commonAttendees.retainAll(request.getAttendees()); 
+
+            if (commonAttendees.size() > 0) { 
+                times.add(event.getWhen());
+            }
+
+        return times;
    }
 
   /**
