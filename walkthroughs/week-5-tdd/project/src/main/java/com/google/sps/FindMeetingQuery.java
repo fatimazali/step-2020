@@ -31,7 +31,11 @@ public final class FindMeetingQuery {
    * @param attendees The collection of people attending the event. Must be non-null.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+
+    ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, request);
+    ArrayList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
+    ArrayList<TimeRange> availableTimes = determineAvailableTimes(unavailableTimes);
+
   }
 
   /**
@@ -41,18 +45,18 @@ public final class FindMeetingQuery {
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-   private Collection<TimeRange> findEvents(Collection<Event> events, MeetingRequest request, QueryType type) {
+   private ArrayList<TimeRange> findEventTimes(Collection<Event> events, MeetingRequest request) {
 
    }
 
   /**
-   * Determine the overlap between all event times. 
+   * Determine the overlap among all event times. 
    *
    * @param title The human-readable name for the event. Must be non-null.
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-   private Collection<TimeRange> determineUnavailableTimes(Collection<Event> events, MeetingRequest request, QueryType type) {
+   private ArrayList<TimeRange> determineUnavailableTimes(ArrayList<TimeRange> eventTimes) {
 
    }
 
@@ -63,7 +67,7 @@ public final class FindMeetingQuery {
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-   private Collection<TimeRange> determineAvailableTimes(Collection<Event> events, MeetingRequest request, QueryType type) {
+   private ArrayList<TimeRange> determineAvailableTimes(ArrayList<TimeRange> unavailableTimes) {
 
    }
       
