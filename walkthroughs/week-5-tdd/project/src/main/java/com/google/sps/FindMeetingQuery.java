@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.LinkedList;
 
 public final class FindMeetingQuery {
   /**
@@ -33,8 +34,9 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
 
     ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, request);
-    ArrayList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
-    ArrayList<TimeRange> availableTimes = determineAvailableTimes(unavailableTimes);
+    LinkedList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
+    //ArrayList<TimeRange> availableTimes = determineAvailableTimes(unavailableTimes);
+    return unavailableTimes;
 
   }
 
@@ -58,19 +60,49 @@ public final class FindMeetingQuery {
             if (commonAttendees.size() > 0) { 
                 times.add(event.getWhen());
             }
+        }
 
         return times;
    }
 
   /**
-   * Determine the overlap among all event times. 
+   * Determine the overlap among all event times, using an O(nlogn) sorting algorithm and an O(n) linear pass to merge the TimeRanges.
    *
    * @param title The human-readable name for the event. Must be non-null.
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-   private ArrayList<TimeRange> determineUnavailableTimes(ArrayList<TimeRange> eventTimes) {
+   private LinkedList<TimeRange> determineUnavailableTimes(ArrayList<TimeRange> eventTimes) {
 
+       // Sort the times to reduce time complexity by allowing us to identify overlap quicker
+       eventTimes.sort(TimeRange.ORDER_BY_START);
+
+       LinkedList<TimeRange> mergedeventTimes = new LinkedList<>();
+       for (TimeRange tr : mergedeventTimes) {
+           // Append current TimeRange if there's no overlap with the last TimeRange or no TimeRanges have been merged yet
+           if (mergedeventTimes.isEmpty() || mergedeventTimes.getLast().overlaps(tr)) {
+               mergedeventTimes.add(tr);
+           }
+
+           // Merge current and previous TimeRange if overlap exists by updating the last TimeRange
+           else {
+               TimeRange lastTime = mergedeventTimes.getLast();
+
+               // Identify the latest end of the merged Time Range
+               int mergedEnd; 
+               if (Long.compare(lastTime.end(), tr.end()) > 0) {
+                   mergedEnd = lastTime.end();
+               }
+               else {
+                   mergedEnd = tr.end();
+               }
+
+               //mergedeventTimes.getLast()
+               lastTime = TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false);
+           }
+        }
+
+        return mergedeventTimes;
    }
 
   /**
@@ -80,8 +112,8 @@ public final class FindMeetingQuery {
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-   private ArrayList<TimeRange> determineAvailableTimes(ArrayList<TimeRange> unavailableTimes) {
+//    private ArrayList<TimeRange> determineAvailableTimes(LinkedList<TimeRange> unavailableTimes) {
 
-   }
+//    }
       
 }
