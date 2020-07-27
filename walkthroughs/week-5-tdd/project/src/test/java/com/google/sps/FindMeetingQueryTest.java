@@ -14,6 +14,8 @@
 
 package com.google.sps;
 
+import java.io.*; 
+import java.lang.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -215,7 +217,7 @@ public final class FindMeetingQueryTest {
             Arrays.asList(PERSON_A)));
 
     MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
-
+    System.out.println("this test");
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected =
         Arrays.asList(TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES));
