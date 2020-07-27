@@ -35,8 +35,8 @@ public final class FindMeetingQuery {
 
     ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, request);
     LinkedList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
-    //ArrayList<TimeRange> availableTimes = determineAvailableTimes(unavailableTimes);
-    return unavailableTimes;
+    
+    return determineAvailableTimes(unavailableTimes);
 
   }
 
@@ -97,8 +97,8 @@ public final class FindMeetingQuery {
                    mergedEnd = tr.end();
                }
 
-               //mergedeventTimes.getLast()
-               lastTime = TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false);
+               //mergedeventTimes.getLast() -- remove once pass tests / verify that original element gets updated
+               lastTime = TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false); // is this not getting udpated correctly??
            }
         }
 
@@ -112,8 +112,38 @@ public final class FindMeetingQuery {
    * @param when The time when the event takes place. Must be non-null.
    * @param attendees The collection of people attending the event. Must be non-null.
    */
-//    private ArrayList<TimeRange> determineAvailableTimes(LinkedList<TimeRange> unavailableTimes) {
+    private ArrayList<TimeRange> determineAvailableTimes(LinkedList<TimeRange> unavailableTimes) {
 
-//    }
+        ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
+
+        // If no time conflicts are found, or there are no attendees present in the meeting request
+        if (unavailableTimes.size() == 0) {
+            availableTimes.add(TimeRange.WHOLE_DAY);
+        }
+        else {
+            // If the first event does not start at the beginning of the day, create availability until the first event 
+            if (unavailableTimes.get(0).start() != TimeRange.START_OF_DAY) {
+                availableTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, unavailableTimes.getFirst().start(), false));
+            }
+
+            // Add availability between all unavailable times
+            int i = 0; 
+            while (i != unavailableTimes.size() - 1){
+                TimeRange earlierTime = unavailableTimes.get(i);
+                TimeRange laterTime = unavailableTimes.get(i + 1);
+                
+                // Attendees are available in between the events, excluding the start time of the second event
+                availableTimes.add(TimeRange.fromStartEnd(earlierTime.end(), laterTime.start(), false));
+
+                i++;
+            }    
+
+            // If the last event does not end at the end of the day, create availability after the last event
+            if (unavailableTimes.get(0).end() != TimeRange.END_OF_DAY) {
+                availableTimes.add(TimeRange.fromStartEnd(unavailableTimes.getLast().end(), TimeRange.END_OF_DAY, true));
+            }
+        }
+        return availableTimes;
+    }
       
 }
