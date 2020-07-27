@@ -83,10 +83,8 @@ public final class FindMeetingQuery {
            // Append current TimeRange if there's no overlap with the last TimeRange or no TimeRanges have been merged yet
            if (mergedeventTimes.isEmpty() || !mergedeventTimes.getLast().overlaps(tr)) {
                mergedeventTimes.add(tr);
-           }
-
-           // Merge current and previous TimeRange if overlap exists by updating the last TimeRange 
-           else {
+           } else {
+               // Merge current and previous TimeRange if overlap exists by updating the last TimeRange 
                TimeRange lastTime = mergedeventTimes.getLast();
 
                // Identify the latest end of the merged Time Range
