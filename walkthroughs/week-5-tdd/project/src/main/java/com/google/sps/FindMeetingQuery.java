@@ -50,18 +50,18 @@ public final class FindMeetingQuery {
 
     ArrayList<TimeRange> mandatoryAndOptionalAvailableTimes =  determineAvailableTimes(unavailableMandatoryAndOptionalTimes, requestDuration);
 
-    if (mandatoryAndOptionalAvailableTimes.size() > 0)
+    if (mandatoryAndOptionalAvailableTimes.size() > 0) {
         return mandatoryAndOptionalAvailableTimes;
-    else 
+    } else {
         return determineAvailableTimes(unavailableMandatoryTimes, requestDuration);
-
+    }
   }
 
   /**
    * Find all events that will be attended by attendees of the meeting request.
    *
    * @param events The complete collection of events in the booking system.
-   * @param request The specific meeting request that the user is making.
+   * @param requestedAttendees The attendees (optional or mandatory) that we want to find event times for.
    * @return The list of all event times attended by the required attendees.
    */
    private ArrayList<TimeRange> findEventTimes(Collection<Event> events, ArrayList<String> requestedAttendees) {
@@ -114,7 +114,8 @@ public final class FindMeetingQuery {
                }
 
                mergedEventTimes.removeLast();
-               mergedEventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false));
+               mergedEventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(),
+               mergedEnd, false));
            }
         }
 
@@ -134,14 +135,16 @@ public final class FindMeetingQuery {
 
         // If no time conflicts are found, or there are no attendees present in the meeting request, and the meeting request is shorter than a whole day
         if (unavailableTimes.size() == 0) {
-            if (requestDuration <= (long) TimeRange.WHOLE_DAY.duration())
+            if (requestDuration <= (long) TimeRange.WHOLE_DAY.duration()) {
                 availableTimes.add(TimeRange.WHOLE_DAY);
+            }
 
         } else {
             // If the first event does not start at the beginning of the day, create availability until the first event if there is enough time
             if (unavailableTimes.getFirst().start() != TimeRange.START_OF_DAY) {
                 if (unavailableTimes.getFirst().start() - TimeRange.START_OF_DAY >= requestDuration) {
-                    availableTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, unavailableTimes.getFirst().start(), false));
+                    availableTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, unavailableTimes.getFirst().start(),
+                    false));
                 }
             }
 
@@ -153,7 +156,9 @@ public final class FindMeetingQuery {
 
                 // If the duration between two events is long enough, then the attendees are available in between the events, excluding the start time of the second event
                 if (laterTime.start() - earlierTime.end() >= (requestDuration)) {
-                    availableTimes.add(TimeRange.fromStartEnd(earlierTime.end(), laterTime.start(), false));
+                    availableTimes.add(TimeRange.fromStartEnd(earlierTime.end(),
+                    laterTime.start(), 
+                    false));
                 }
 
                 i++;
@@ -162,11 +167,11 @@ public final class FindMeetingQuery {
             // If the last event does not end at the end of the day, create availability after the last event if there is enough time
             if (unavailableTimes.getLast().end() - 1 != TimeRange.END_OF_DAY) {
                 if (TimeRange.END_OF_DAY - unavailableTimes.getLast().end() >= requestDuration) {
-                    availableTimes.add(TimeRange.fromStartEnd(unavailableTimes.getLast().end(), TimeRange.END_OF_DAY, true));\
+                    availableTimes.add(TimeRange.fromStartEnd(unavailableTimes.getLast().end(), 
+                    TimeRange.END_OF_DAY, true));
                 }
             }
         }
         return availableTimes;
     }
-      
 }
