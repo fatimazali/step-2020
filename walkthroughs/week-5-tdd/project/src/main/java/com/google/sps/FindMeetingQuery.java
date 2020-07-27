@@ -141,27 +141,30 @@ public final class FindMeetingQuery {
         else {
             // If the first event does not start at the beginning of the day, create availability until the first event if there is enough time
             if (unavailableTimes.getFirst().start() != TimeRange.START_OF_DAY) {
-                if (unavailableTimes.getFirst().start() - TimeRange.START_OF_DAY >= requestDuration)
+                if (unavailableTimes.getFirst().start() - TimeRange.START_OF_DAY >= requestDuration) {
                     availableTimes.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, unavailableTimes.getFirst().start(), false));
+                }
             }
 
             // Add availability between all unavailable times
             int i = 0; 
-            while (i != unavailableTimes.size() - 1){ // does this catch for only 2 elements aka size 2 yes it runs through once
+            while (i != unavailableTimes.size() - 1){ 
                 TimeRange earlierTime = unavailableTimes.get(i);
                 TimeRange laterTime = unavailableTimes.get(i + 1);
 
                 // If the duration between two events is long enough, then the attendees are available in between the events, excluding the start time of the second event
-                if (laterTime.start() - earlierTime.end() >= (requestDuration))
+                if (laterTime.start() - earlierTime.end() >= (requestDuration)) {
                     availableTimes.add(TimeRange.fromStartEnd(earlierTime.end(), laterTime.start(), false));
+                }
 
                 i++;
             }    
 
             // If the last event does not end at the end of the day, create availability after the last event if there is enough time
             if (unavailableTimes.getLast().end() - 1 != TimeRange.END_OF_DAY) {
-                if (TimeRange.END_OF_DAY - unavailableTimes.getLast().end() >= requestDuration)
-                    availableTimes.add(TimeRange.fromStartEnd(unavailableTimes.getLast().end(), TimeRange.END_OF_DAY, true));
+                if (TimeRange.END_OF_DAY - unavailableTimes.getLast().end() >= requestDuration) {
+                    availableTimes.add(TimeRange.fromStartEnd(unavailableTimes.getLast().end(), TimeRange.END_OF_DAY, true));\
+                }
             }
         }
         return availableTimes;
