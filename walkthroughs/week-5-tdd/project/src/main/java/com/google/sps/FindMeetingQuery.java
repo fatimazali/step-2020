@@ -97,7 +97,7 @@ public final class FindMeetingQuery {
                }
 
                mergedeventTimes.removeLast();
-               mergedeventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false));
+               mergedeventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(), mergedEnd, false));
            }
         }
 
