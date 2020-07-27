@@ -25,7 +25,7 @@ import java.util.LinkedList;
 
 public final class FindMeetingQuery {
   /**
-   * Return time ranges when an event can be scheduled for all mandatory attendes of the meeting request.
+   * Return time ranges when an event can be scheduled for all mandatory attendees of the meeting request.
    *
    * @param events The complete collection of events in the booking system.
    * @param request The specific meeting request that the user is making.
@@ -137,8 +137,7 @@ public final class FindMeetingQuery {
             if (requestDuration <= (long) TimeRange.WHOLE_DAY.duration())
                 availableTimes.add(TimeRange.WHOLE_DAY);
 
-        }
-        else {
+        } else {
             // If the first event does not start at the beginning of the day, create availability until the first event if there is enough time
             if (unavailableTimes.getFirst().start() != TimeRange.START_OF_DAY) {
                 if (unavailableTimes.getFirst().start() - TimeRange.START_OF_DAY >= requestDuration) {
