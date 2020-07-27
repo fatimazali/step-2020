@@ -219,7 +219,7 @@ public final class FindMeetingQueryTest {
   @Test
   public void optionalAttendeeHasTwoOverlaps() {
     // Have each mandatory attendee have different events, and a single optional attendee who has a single event
-    // We should see only wo options that work for all three attendees.
+    // We should see only two options that work for all three attendees.
     //
     // Events  :       |--A--|     |--B--|
     //         :             |--C--|
@@ -422,4 +422,3 @@ public final class FindMeetingQueryTest {
     Assert.assertEquals(expected, actual);
   }
 }
-
