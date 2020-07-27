@@ -29,28 +29,25 @@ public final class FindMeetingQuery {
   /**
    * Return time ranges when an event can be scheduled for all mandatory attendes of the meeting request.
    *
-   * @param title The human-readable name for the event. Must be non-null.
-   * @param when The time when the event takes place. Must be non-null.
-   * @param attendees The collection of people attending the event. Must be non-null.
+   * @param events The complete collection of events in the booking system.
+   * @param request The specific meeting request that the user is making.
+   * @return The list of available event times.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-
-    // The meeting duration can not be longer than an entire day
-    //TimeRange.WHOLE_DAY
     
     ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, request);
     LinkedList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
     
-    return determineAvailableTimes(unavailableTimes, request);
+    return determineAvailableTimes(unavailableTimes, request.getDuration());
 
   }
 
   /**
-   * Find all events that will be attended by any mandatory attendee of the request.
+   * Find all events that will be attended by attendees of the meeting request.
    *
-   * @param title The human-readable name for the event. Must be non-null.
-   * @param when The time when the event takes place. Must be non-null.
-   * @param attendees The collection of people attending the event. Must be non-null.
+   * @param events The complete collection of events in the booking system.
+   * @param request The specific meeting request that the user is making.
+   * @return The list of all event times attended by the required attendees.
    */
    private ArrayList<TimeRange> findEventTimes(Collection<Event> events, MeetingRequest request) {
        ArrayList<TimeRange> times = new ArrayList<TimeRange>();
@@ -73,9 +70,8 @@ public final class FindMeetingQuery {
   /**
    * Determine the overlap among all event times, using an O(nlogn) sorting algorithm and an O(n) linear pass to merge the TimeRanges.
    *
-   * @param title The human-readable name for the event. Must be non-null.
-   * @param when The time when the event takes place. Must be non-null.
-   * @param attendees The collection of people attending the event. Must be non-null.
+   * @param eventTimes The list of all event times attended by the required attendees.
+   * @return The list of attendee event time overlaps.
    */
    private LinkedList<TimeRange> determineUnavailableTimes(ArrayList<TimeRange> eventTimes) {
 
@@ -89,7 +85,7 @@ public final class FindMeetingQuery {
                mergedeventTimes.add(tr);
            }
 
-           // Merge current and previous TimeRange if overlap exists by updating the last TimeRange -- can we always be sure last time?
+           // Merge current and previous TimeRange if overlap exists by updating the last TimeRange 
            else {
                TimeRange lastTime = mergedeventTimes.getLast();
 
@@ -113,14 +109,13 @@ public final class FindMeetingQuery {
   /**
    * Find the time in each day outside of the range of unavailable times.
    *
-   * @param title The human-readable name for the event. Must be non-null.
-   * @param when The time when the event takes place. Must be non-null.
-   * @param attendees The collection of people attending the event. Must be non-null.
+   * @param unavailableTimes The list of attendee event time overlaps.
+   * @param requestDuration The duration of the requested meeting: all meeting times must be longer than this
+   * @return The complete list of available times for the requested meeting to occur.  
    */
-    private ArrayList<TimeRange> determineAvailableTimes(LinkedList<TimeRange> unavailableTimes, MeetingRequest request) {
+    private ArrayList<TimeRange> determineAvailableTimes(LinkedList<TimeRange> unavailableTimes, long requestDuration) {
 
         ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
-        long requestDuration = request.getDuration();
 
         // If no time conflicts are found, or there are no attendees present in the meeting request, and the meeting request is shorter than a whole day
         if (unavailableTimes.size() == 0) {
