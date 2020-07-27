@@ -34,11 +34,28 @@ public final class FindMeetingQuery {
    * @return The list of available event times.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+
+    ArrayList<String> mandatoryAttendees = new ArrayList<String>(); 
+    mandatoryAttendees.addAll(request.getAttendees());
     
-    ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, request);
-    LinkedList<TimeRange> unavailableTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
-    
-    return determineAvailableTimes(unavailableTimes, request.getDuration());
+    ArrayList<String> mandatoryAndOptionalAttendees = new ArrayList<String>(); 
+    mandatoryAndOptionalAttendees.addAll(request.getAttendees());
+    mandatoryAndOptionalAttendees.addAll(request.getOptionalAttendees());
+
+    ArrayList<TimeRange> mandatoryAttendeeEventTimes = findEventTimes(events, mandatoryAttendees);
+    ArrayList<TimeRange> mandatoryAndOptionalAttendeeEventTimes = findEventTimes(events, mandatoryAndOptionalAttendees);
+
+    LinkedList<TimeRange> unavailableMandatoryTimes = determineUnavailableTimes(mandatoryAttendeeEventTimes);
+    LinkedList<TimeRange> unavailableMandatoryAndOptionalTimes = determineUnavailableTimes(mandatoryAndOptionalAttendeeEventTimes);
+
+    long requestDuration = request.getDuration();
+
+    ArrayList<TimeRange> mandatoryAndOptionalAvailableTimes =  determineAvailableTimes(unavailableMandatoryAndOptionalTimes, requestDuration);
+
+    if (mandatoryAndOptionalAvailableTimes.size() > 0)
+        return mandatoryAndOptionalAvailableTimes;
+    else 
+        return determineAvailableTimes(unavailableMandatoryTimes, requestDuration);
 
   }
 
@@ -49,7 +66,7 @@ public final class FindMeetingQuery {
    * @param request The specific meeting request that the user is making.
    * @return The list of all event times attended by the required attendees.
    */
-   private ArrayList<TimeRange> findEventTimes(Collection<Event> events, MeetingRequest request) {
+   private ArrayList<TimeRange> findEventTimes(Collection<Event> events, ArrayList<String> requestedAttendees) {
        ArrayList<TimeRange> times = new ArrayList<TimeRange>();
         for (Event event : events) {
             HashSet<String> commonAttendees = new HashSet<String>();
@@ -57,7 +74,7 @@ public final class FindMeetingQuery {
             // Add the event attendees first because there tends to be fewer of them
             commonAttendees.addAll(event.getAttendees()); 
             // Ensure to only find availability of the requested attendees
-            commonAttendees.retainAll(request.getAttendees()); 
+            commonAttendees.retainAll(requestedAttendees); 
 
             if (commonAttendees.size() > 0) { 
                 times.add(event.getWhen());
