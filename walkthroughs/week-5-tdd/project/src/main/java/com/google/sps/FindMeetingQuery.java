@@ -120,8 +120,7 @@ public final class FindMeetingQuery {
             if (requestDuration <= (long) TimeRange.WHOLE_DAY.duration())
                 availableTimes.add(TimeRange.WHOLE_DAY);
 
-        }
-        else {
+        } else {
             // If the first event does not start at the beginning of the day, create availability until the first event if there is enough time
             if (unavailableTimes.getFirst().start() != TimeRange.START_OF_DAY) {
                 if (unavailableTimes.getFirst().start() - TimeRange.START_OF_DAY >= requestDuration)
