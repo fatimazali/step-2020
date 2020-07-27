@@ -93,16 +93,16 @@ public final class FindMeetingQuery {
        // Sort the times to reduce time complexity by allowing us to identify overlap quicker
        eventTimes.sort(TimeRange.ORDER_BY_START);
 
-       LinkedList<TimeRange> mergedeventTimes = new LinkedList<>();
+       LinkedList<TimeRange> mergedEventTimes = new LinkedList<>();
        for (TimeRange tr : eventTimes) {
            // Append current TimeRange if there's no overlap with the last TimeRange or no TimeRanges have been merged yet
-           if (mergedeventTimes.isEmpty() || !mergedeventTimes.getLast().overlaps(tr)) {
-               mergedeventTimes.add(tr);
+           if (mergedEventTimes.isEmpty() || !mergedEventTimes.getLast().overlaps(tr)) {
+               mergedEventTimes.add(tr);
            }
 
            // Merge current and previous TimeRange if overlap exists by updating the last TimeRange 
            else {
-               TimeRange lastTime = mergedeventTimes.getLast();
+               TimeRange lastTime = mergedEventTimes.getLast();
 
                // Identify the latest end of the merged Time Range
                int mergedEnd; 
@@ -113,12 +113,12 @@ public final class FindMeetingQuery {
                    mergedEnd = tr.end();
                }
 
-               mergedeventTimes.removeLast();
-               mergedeventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false));
+               mergedEventTimes.removeLast();
+               mergedEventTimes.addLast(TimeRange.fromStartEnd(lastTime.start(),mergedEnd, false));
            }
         }
 
-        return mergedeventTimes;
+        return mergedEventTimes;
    }
 
   /**
